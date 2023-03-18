@@ -50,14 +50,14 @@ public class TestMain {
         tomlData.node("number").set(27);
         tomlData.node("pi").set(3.14);
 
-        tomlData.node("time").set(dateTime.toString());
-
         var peopleNode = root.node("people");
         var people = new ArrayList<Person>();
         people.add(new Person("qyl27", Mood.HAPPY));
         people.add(new Person("iceBear67", Mood.SATISFIED));
         people.add(new Person("IamNotExist", Mood.CONFUSED));
         peopleNode.set(people);
+
+        tomlData.node("time").set(dateTime.toString());
 
         testLoader.save(root);
     }

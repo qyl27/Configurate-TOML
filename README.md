@@ -1,8 +1,12 @@
 # Configurate-TOML
-Toml format support for SpongePowered/Configurate.
+Toml format support for SpongePowered/Configurate.  
+A library for [kalculos/dash](https://github.com/kalculos/dash).
 
 ## License
 Apache-2.0
+
+## Todo
+- [ ] More test for `TomlConfigurationLoader`.
 
 ## Known issues
 - Generated TOML file can't use toml tables, because of [FasterXML/jackson-dataformats-text#254](https://github.com/FasterXML/jackson-dataformats-text/issues/254).
