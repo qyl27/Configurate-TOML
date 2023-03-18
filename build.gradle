@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group 'cx.rain.configurate_toml'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.spongepowered:configurate-core:4.1.2'
+
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-toml:2.14.2'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}

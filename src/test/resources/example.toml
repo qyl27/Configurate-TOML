@@ -1,0 +1,28 @@
+name = "example.toml"
+
+[owner]
+# Owner of example.toml.
+name = "qyl27"
+
+[toml]
+credits = [
+    "jackson",
+    "configurate"
+]
+
+[toml.data]
+number = 27
+pi = 3.14
+time = 2023-03-18T18:00:00Z
+
+[[people]]
+name = "qyl27"
+mood = "HAPPY"
+
+[[people]]
+name = "iceBear67"
+mood = "SATISFIED"
+
+[[people]]
+name = "iAmNotExist"
+mood = "UNHAPPY"
