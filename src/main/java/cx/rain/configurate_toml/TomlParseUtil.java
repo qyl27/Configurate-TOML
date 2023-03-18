@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.util.Iterator;
+import java.util.Map;
 
 public class TomlParseUtil {
     protected static void fromJsonNode(final JsonNode jsonNode, final ConfigurationNode node) throws SerializationException {
@@ -35,20 +37,20 @@ public class TomlParseUtil {
 
     private static void fromContainer(final JsonNode jsonNode, final ConfigurationNode node) throws SerializationException {
         if (jsonNode.isObject()) {
-            var objNode = (ObjectNode) jsonNode;
-            var it = objNode.fields();
+            ObjectNode objNode = (ObjectNode) jsonNode;
+            Iterator<Map.Entry<String, JsonNode>> it = objNode.fields();
             while (it.hasNext()) {
-                var child = it.next();
+                Map.Entry<String, JsonNode> child = it.next();
                 fromJsonNode(child.getValue(), node.node(child.getKey()));
             }
             return;
         }
 
         if (jsonNode.isArray()) {
-            var arrNode = (ArrayNode) jsonNode;
-            var it = arrNode.elements();
+            ArrayNode arrNode = (ArrayNode) jsonNode;
+            Iterator<JsonNode> it = arrNode.elements();
             while (it.hasNext()) {
-                var child = it.next();
+                JsonNode child = it.next();
                 fromJsonNode(child, node.appendListNode());
             }
         }
@@ -56,59 +58,63 @@ public class TomlParseUtil {
 
     private static void fromValue(final JsonNode jsonNode, final ConfigurationNode node) throws SerializationException {
         if (jsonNode.isBoolean()) {
-            var boolNode = jsonNode.asBoolean();
+            boolean boolNode = jsonNode.asBoolean();
             node.set(Boolean.class, boolNode);
             return;
         }
 
         if (jsonNode.isShort()) {
-            var shortNode = (short) jsonNode.asInt();
+            short shortNode = (short) jsonNode.asInt();
             node.set(Short.class, shortNode);
             return;
         }
 
         if (jsonNode.isInt()) {
-            var intNode = jsonNode.asInt();
+            int intNode = jsonNode.asInt();
             node.set(Integer.class, intNode);
             return;
         }
 
         if (jsonNode.isLong() || jsonNode.isBigInteger()) {
-            var longNode = jsonNode.asLong();
+            long longNode = jsonNode.asLong();
             node.set(Long.class, longNode);
             return;
         }
 
         if (jsonNode.isFloat()) {
-            var floatNode = jsonNode.floatValue();
+            float floatNode = jsonNode.floatValue();
             node.set(Float.class, floatNode);
             return;
         }
 
         if (jsonNode.isDouble() || jsonNode.isBigDecimal()) {
-            var doubleNode = jsonNode.doubleValue();
+            double doubleNode = jsonNode.doubleValue();
             node.set(Double.class, doubleNode);
             return;
         }
 
         if (jsonNode.isPojo()) {
-            var pojoNode = (POJONode) jsonNode;
-            var pojo = pojoNode.getPojo();
+            POJONode pojoNode = (POJONode) jsonNode;
+            Object pojo = pojoNode.getPojo();
             // There is only four pojo value about time.
-            if (pojo instanceof OffsetDateTime offsetDateTime) {
+            if (pojo instanceof OffsetDateTime) {
+                OffsetDateTime offsetDateTime = (OffsetDateTime) pojo;
                 node.set(OffsetDateTime.class, offsetDateTime);
-            } else if (pojo instanceof LocalDateTime localDateTime) {
+            } else if (pojo instanceof LocalDateTime) {
+                LocalDateTime localDateTime = (LocalDateTime) pojo;
                 node.set(LocalDateTime.class, localDateTime);
-            } else if (pojo instanceof LocalDate localDate) {
+            } else if (pojo instanceof LocalDate) {
+                LocalDate localDate = (LocalDate) pojo;
                 node.set(LocalDate.class, localDate);
-            } else if (pojo instanceof LocalTime localTime) {
+            } else if (pojo instanceof LocalTime) {
+                LocalTime localTime = (LocalTime) pojo;
                 node.set(LocalTime.class, localTime);
             }
             return;
         }
 
         if (jsonNode.isTextual()) {
-            var textNode = jsonNode.asText();
+            String textNode = jsonNode.asText();
             node.set(String.class, textNode);
         }
     }

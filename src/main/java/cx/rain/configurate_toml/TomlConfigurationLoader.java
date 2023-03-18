@@ -1,5 +1,6 @@
 package cx.rain.configurate_toml;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.toml.*;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
@@ -24,7 +25,7 @@ public class TomlConfigurationLoader extends AbstractConfigurationLoader<Comment
     @Override
     protected void loadInternal(CommentedConfigurationNode node, BufferedReader reader) throws ParsingException {
         try {
-            var tree = tomlMapper.readTree(reader);
+            JsonNode tree = tomlMapper.readTree(reader);
             TomlParseUtil.fromJsonNode(tree, node);
         } catch (IOException e) {
             throw new RuntimeException(e);

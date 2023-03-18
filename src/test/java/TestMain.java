@@ -1,21 +1,20 @@
 import cx.rain.configurate_toml.TomlConfigurationLoader;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.serialize.SerializationException;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TestMain {
     final TomlConfigurationLoader testLoader = TomlConfigurationLoader.builder()
-            .path(Path.of("test.toml"))
+            .path(new File("test.toml").toPath())
             .parseJavaTime()
             .failOnWriteNull()
             .build();
@@ -29,29 +28,36 @@ public class TestMain {
         UNHAPPY;
     }
 
-    private record Person(String name, Mood mood) {
+    private class Person {
+        protected String name;
+        protected Mood mood;
+
+        protected Person(String name, Mood mood) {
+            this.name = name;
+            this.mood = mood;
+        }
     }
 
     @Test
     @Order(2)
     void testSimpleSaving() throws SerializationException, IOException {
-        var root = testLoader.createNode();
+        CommentedConfigurationNode root = testLoader.createNode();
 
         root.node("name").set("test.toml");
-        root.node("owner", "name").set("qyl27").comment("Owner of example.toml.");
+        root.node("owner", "name").set("qyl27").comment("Owner of text.toml.");
 
-        var tomlNode = root.node("toml");
-        var credits = new String[] {
+        CommentedConfigurationNode tomlNode = root.node("toml");
+        String[] credits = new String[] {
                 "jackson", "configurate"
         };
         tomlNode.node("credits").set(credits);
 
-        var tomlData = root.node("toml", "data");
+        CommentedConfigurationNode tomlData = root.node("toml", "data");
         tomlData.node("number").set(27);
         tomlData.node("pi").set(3.14);
 
-        var peopleNode = root.node("people");
-        var people = new ArrayList<Person>();
+        CommentedConfigurationNode peopleNode = root.node("people");
+        List<Person> people = new ArrayList<>();
         people.add(new Person("qyl27", Mood.HAPPY));
         people.add(new Person("iceBear67", Mood.SATISFIED));
         people.add(new Person("IamNotExist", Mood.CONFUSED));
@@ -65,7 +71,7 @@ public class TestMain {
     @Test
     @Order(1)
     void testLoad() throws ConfigurateException {
-        var root = testLoader.load();
+        CommentedConfigurationNode root = testLoader.load();
 
         assert root.node("people").isList();
 
@@ -74,7 +80,7 @@ public class TestMain {
         assert root.node("toml", "data", "number").getInt() == 27;
         assert root.node("toml", "data", "pi").getDouble() == 3.14;
 
-        var time = root.node("toml", "data", "time").getString();
+        String time = root.node("toml", "data", "time").getString();
         assert dateTime.getHour() == OffsetDateTime.parse(time, DateTimeFormatter.ISO_OFFSET_DATE_TIME).getHour();
 
         assert root.node("toml", "credits").childrenList().size() == 2;
