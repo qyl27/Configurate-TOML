@@ -29,8 +29,8 @@ public class TestMain {
     }
 
     private class Person {
-        protected String name;
-        protected Mood mood;
+        public String name;
+        public Mood mood;
 
         protected Person(String name, Mood mood) {
             this.name = name;
