@@ -5,6 +5,20 @@ A library for [kalculos/dash](https://github.com/kalculos/dash).
 ## License
 Apache-2.0
 
+## Use as a dependency
+1. Add the JitPack repository to your build file
+```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+```
+2. Add the dependency
+```groovy
+dependencies {
+    implementation 'com.github.qyl27:Configurate-TOML:main-SNAPSHOT'
+}
+```
+
 ## Todo
 - [ ] More test for `TomlConfigurationLoader`.
 
