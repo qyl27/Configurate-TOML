@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group 'cx.rain.configurate_toml'
@@ -10,9 +11,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.spongepowered:configurate-core:4.1.2'
+    compileOnly 'org.spongepowered:configurate-core:4.1.2'
+    testImplementation 'org.spongepowered:configurate-core:4.1.2'
 
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-toml:2.14.2'
+    implementation 'org.tomlj:tomlj:1.1.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
@@ -21,3 +23,12 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+shadowJar {
+    enableRelocation true
+    relocationPrefix 'libs'
+
+    archiveClassifier = null
+}
+
+jar.finalizedBy(shadowJar)

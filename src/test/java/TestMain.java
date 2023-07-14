@@ -15,8 +15,8 @@ import java.util.List;
 public class TestMain {
     final TomlConfigurationLoader testLoader = TomlConfigurationLoader.builder()
             .path(new File("test.toml").toPath())
-            .parseJavaTime()
-            .failOnWriteNull()
+//            .parseJavaTime()
+//            .failOnWriteNull()
             .build();
 
     final static OffsetDateTime dateTime = OffsetDateTime.now();
